@@ -1,0 +1,9 @@
+{
+  "ownerId": "YOUR_CLAWHUB_USER_ID",
+  "slug": "cdp-agent",
+  "version": "3.0.0",
+  "publishedAt": 1777113600000,
+  "description": "Control any real browser on any Windows/Mac/Linux PC from your AI agent. No headless, no detection, no cloud costs.",
+  "tags": ["cdp", "browser", "chrome", "websocket", "automation", "windows", "mac", "linux", "hermes", "openclaw"],
+  "homepage": "https://github.com/linpengishero/cdp-agent-skillpack"
+}

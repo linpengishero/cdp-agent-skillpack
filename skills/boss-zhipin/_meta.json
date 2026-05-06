@@ -1,0 +1,9 @@
+{
+  "ownerId": "YOUR_CLAWHUB_USER_ID",
+  "slug": "boss-zhipin",
+  "version": "2.0.0",
+  "publishedAt": 1777113600000,
+  "description": "BOSS直聘 automation — search remote/part-time tech jobs, auto-send chat requests. Requires cdp-agent skill.",
+  "tags": ["boss", "zhipin", "job", "recruitment", "automation", "china"],
+  "homepage": "https://github.com/linpengishero/cdp-agent-skillpack"
+}
