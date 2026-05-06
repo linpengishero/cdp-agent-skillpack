@@ -52,7 +52,69 @@ import httpx
 WS_HOST = "0.0.0.0"
 WS_PORT = 19400
 CHROME_PORT = 9222
-CHROME_PATH = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
+
+# Auto-detect Chrome/Chromium path per platform
+def _detect_chrome_path() -> str:
+    """Find Chrome/Chromium executable across platforms."""
+    import shutil
+    system = sys.platform
+
+    if system == "win32":
+        candidates = [
+            r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+            r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+            r"C:\Users\%USERNAME%\AppData\Local\Google\Chrome\Application\chrome.exe",
+            # Edge (Chromium-based)
+            r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+        ]
+        # Try shutil.which first (handles PATH)
+        found = shutil.which("chrome") or shutil.which("msedge") or shutil.which("chromium")
+        if found:
+            return found
+        for p in candidates:
+            expanded = os.path.expandvars(p)
+            if os.path.exists(expanded):
+                return expanded
+
+    elif system == "darwin":
+        candidates = [
+            "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+            "/Applications/Chromium.app/Contents/MacOS/Chromium",
+            "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+        ]
+        found = shutil.which("google-chrome") or shutil.which("chrome") or shutil.which("chromium")
+        if found:
+            return found
+        for p in candidates:
+            if os.path.exists(p):
+                return p
+
+    else:  # linux
+        candidates = [
+            "/usr/bin/google-chrome",
+            "/usr/bin/google-chrome-stable",
+            "/usr/bin/chromium",
+            "/usr/bin/chromium-browser",
+            "/snap/bin/chromium",
+            "/usr/bin/microsoft-edge",
+            "/usr/bin/microsoft-edge-stable",
+        ]
+        found = shutil.which("google-chrome") or shutil.which("chromium") or \
+                shutil.which("google-chrome-stable") or shutil.which("chromium-browser")
+        if found:
+            return found
+        for p in candidates:
+            if os.path.exists(p):
+                return p
+
+    # Last resort — user might set CHROME_PATH env var
+    env_path = os.environ.get("CHROME_PATH", "")
+    if env_path and os.path.exists(env_path):
+        return env_path
+
+    return "google-chrome"  # fallback, will fail gracefully later
+
+CHROME_PATH = _detect_chrome_path()
 USER_DATA_DIR = os.path.join(tempfile.gettempdir(), "chrome_cdp_agent")
 
 # Anti-detection script injected into every new page

@@ -85,23 +85,52 @@ Want a specific platform? Open an issue or contribute a PR.
 ```
 
 Each Windows PC runs `cdp_agent_win.py` which:
-1. Auto-starts Chrome with remote debugging
-2. Injects anti-detection scripts into every page
-3. Exposes a WebSocket API on port 19400
-4. Your AI agent connects and sends commands
+1. Auto-detects your OS (Windows/Mac/Linux) and browser (Chrome/Edge/Chromium)
+2. Auto-starts browser with remote debugging
+3. Injects anti-detection scripts into every page
+4. Exposes a WebSocket API on port 19400
+5. Your AI agent connects and sends commands
+
+### Deployment Modes
+
+**Local mode** (AI agent and browser on same machine):
+```python
+b = SyncClient("ws://127.0.0.1:19400")
+```
+No LAN config needed. Works on Windows, Mac, Linux.
+
+**Remote mode** (control another machine):
+```python
+b = SyncClient("ws://192.168.50.229:19400")
+```
+
+**Multi-machine mode**:
+```python
+pc1 = SyncClient("ws://192.168.50.229:19400")
+pc2 = SyncClient("ws://192.168.50.230:19400")
+```
 
 ### Quick Start
 
-#### 1. Windows PC (each machine you want to control)
+#### 1. Start the middleware (on any OS)
 
-```cmd
+```bash
 pip install websockets psutil httpx
 python cdp_agent_win.py
 ```
 
-Or start Chrome manually:
-```cmd
+The middleware auto-detects your OS (Windows/Mac/Linux) and finds Chrome/Edge/Chromium.
+
+Or start your browser manually with remote debugging:
+```bash
+# Windows
 "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --remote-allow-origins=* --user-data-dir=C:\temp\chrome_debug
+
+# macOS
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 --remote-allow-origins=*
+
+# Linux
+google-chrome --remote-debugging-port=9222 --remote-allow-origins=*
 ```
 
 #### 2. Linux (AI Agent - Hermes/OpenClaude/OpenClaw)
@@ -231,18 +260,46 @@ skill-name/scripts/run.py --ip WINDOWS_IP --action what_to_do
 
 每台 Windows 跑 `cdp_agent_win.py`，AI 通过 WebSocket 连接并发控制。
 
+### 部署模式
+
+**本机模式**（AI 和浏览器在同一台电脑）：
+```python
+b = SyncClient("ws://127.0.0.1:19400")
+```
+不需要改任何配置，Windows/Mac/Linux 都支持。
+
+**远程模式**（控制局域网另一台电脑）：
+```python
+b = SyncClient("ws://192.168.50.229:19400")
+```
+
+**多机并发模式**：
+```python
+pc1 = SyncClient("ws://192.168.50.229:19400")
+pc2 = SyncClient("ws://192.168.50.230:19400")
+```
+
 ### 快速开始
 
-#### 1. 每台要控制的 Windows 电脑
+#### 1. 启动中间件（支持 Windows/Mac/Linux）
 
-```cmd
+```bash
 pip install websockets psutil httpx
 python cdp_agent_win.py
 ```
 
-或者手动启动 Chrome：
-```cmd
+中间件会自动检测你的操作系统和浏览器。
+
+或者手动启动带远程调试的浏览器：
+```bash
+# Windows
 "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --remote-allow-origins=* --user-data-dir=C:\temp\chrome_debug
+
+# macOS
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 --remote-allow-origins=*
+
+# Linux
+google-chrome --remote-debugging-port=9222 --remote-allow-origins=*
 ```
 
 #### 2. Linux（AI 助手）
