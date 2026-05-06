@@ -293,3 +293,9 @@ skills/
 ## License
 
 MIT
+
+## Contact & Support
+
+- **Issues & Feature Requests:** [github.com/linpengishero/cdp-agent-skillpack/issues](https://github.com/linpengishero/cdp-agent-skillpack/issues)
+- **Email:** 459082139@qq.com
+- **Custom development:** Open an issue or send an email for commercial support, custom skills, or enterprise deployment.
